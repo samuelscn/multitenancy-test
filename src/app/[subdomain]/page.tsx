@@ -1,15 +1,17 @@
-import { cookies, headers } from 'next/headers'
+import { headers } from 'next/headers'
+
+function formatHostname(hostName: string) {
+  const hostWithPort = hostName.split('.')[0]
+  return hostWithPort.split(':')[0]
+}
 
 export default async function DynamicHome() {
-  const headersList = await headers()
-  const pathname = headersList.get('x-school-name')
-  const nextCookie = await cookies()
-  const hostname = nextCookie.get('schoolName')?.value
+  const headersData = await headers()
+  const hostname = headersData.get('x-forwarded-host') as string
 
-  console.log('PATHNAME SUBDOMAIN', pathname)
   console.log('HOSTNAME', hostname)
 
   return (
-    <h1>{pathname}</h1>
+    <h1>{formatHostname(hostname)}</h1>
   );
 }

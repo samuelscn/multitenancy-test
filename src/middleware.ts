@@ -7,24 +7,10 @@ function formatHostname(hostName: string) {
 }
 
 export function middleware(request: NextRequest) {
+  if (process.env.NEXT_PUBLIC_NODE_ENV === 'local') return NextResponse.next()
   const url = new URL(request.url);
   const hostName = request.headers.get('Host') as string
-  const schoolName =
-    process.env.NEXT_PUBLIC_NODE_ENV === 'local'
-      ? (process.env.NEXT_PUBLIC_SCHOOL_NAME as string)
-      : formatHostname(hostName)
-  console.log('SCHOOL NAME', schoolName)
-  const cookie = request.cookies.get('registeredStudent')
-  const response = NextResponse.next()
-  response.cookies.set('schoolName', `${schoolName}`)
-  if (typeof cookie === 'undefined') {
-    response.cookies.set('registeredStudent', 'true')
-  }
-
-  request.headers.set("x-school-name", schoolName)
-
-  if (process.env.NEXT_PUBLIC_NODE_ENV === 'local') return response
-
+  const schoolName = formatHostname(hostName)
   return NextResponse.rewrite(new URL(`/${schoolName}${url.pathname}`, request.url))
 }
 
