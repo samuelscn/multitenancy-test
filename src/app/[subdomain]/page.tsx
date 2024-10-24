@@ -6,12 +6,9 @@ function formatHostname(hostName: string) {
 }
 
 export default async function DynamicHome() {
-  const headersData = await headers()
-  const hostname = headersData.get('x-forwarded-host') as string
-
-  console.log('HOSTNAME', hostname)
+  const schoolName = process.env.NEXT_PUBLIC_NODE_ENV === 'local' ? 'teresiano' : formatHostname((await headers()).get('x-forwarded-host') as string)
 
   return (
-    <h1>{formatHostname(hostname)}</h1>
+    <h1>{schoolName}</h1>
   );
 }

@@ -7,7 +7,6 @@ function formatHostname(hostName: string) {
 }
 
 export function middleware(request: NextRequest) {
-  if (process.env.NEXT_PUBLIC_NODE_ENV === 'local') return NextResponse.next()
   const url = new URL(request.url);
   const hostName = request.headers.get('Host') as string
   const schoolName = formatHostname(hostName)
