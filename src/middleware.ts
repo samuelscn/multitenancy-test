@@ -17,10 +17,11 @@ export function middleware(request: NextRequest) {
   const cookie = request.cookies.get('registeredStudent')
   const response = NextResponse.next()
   response.cookies.set('schoolName', `${schoolName}`)
-  response.headers.set('schoolName', `${schoolName}`)
   if (typeof cookie === 'undefined') {
     response.cookies.set('registeredStudent', 'true')
   }
+
+  request.headers.set("x-school-name", schoolName)
 
   if (process.env.NEXT_PUBLIC_NODE_ENV === 'local') return response
 
