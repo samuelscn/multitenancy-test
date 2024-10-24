@@ -13,6 +13,7 @@ export function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_NODE_ENV === 'local'
       ? (process.env.NEXT_PUBLIC_SCHOOL_NAME as string)
       : formatHostname(hostName)
+  console.log('SCHOOL NAME', schoolName)
   const cookie = request.cookies.get('registeredStudent')
   const response = NextResponse.next()
   response.cookies.set('schoolName', `${schoolName}`)
