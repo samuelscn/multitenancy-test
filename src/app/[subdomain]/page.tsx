@@ -1,15 +1,13 @@
 'use server'
 
-function formatHostname(hostName: string) {
-  const hostWithPort = hostName.split('.')[0]
-  return hostWithPort.split(':')[0]
-}
+export default async function DynamicHome() {
+  const data = await fetch('https://aey7vvraaf.execute-api.us-east-1.amazonaws.com/dev/v2/schools/teresiano/activities?registered_student=true')
+  const activities = await data.json()
 
-export default async function DynamicHome({ params }: { params: { subdomain: string } }) {
-  const { subdomain } = await params
-  const schoolName = process.env.NEXT_PUBLIC_NODE_ENV === 'local' ? 'teresiano' : subdomain
-  console.log(subdomain)
   return (
-    <h1>{schoolName}</h1>
+    <>
+      <h1>{activities.school_name}</h1>
+      {activities.activities.map((activity: any) => (<li>{activity.name}</li>))}
+    </>
   );
 }
