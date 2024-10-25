@@ -6,11 +6,22 @@ function formatHostname(hostName: string) {
   return hostWithPort.split(':')[0]
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
   const hostName = request.headers.get('Host') as string
   const schoolName = formatHostname(hostName)
-  return NextResponse.rewrite(new URL(`/${schoolName}${url.pathname}`, request.url))
+  const dominioMap: any = {
+    'multitenancy-poc': 'teresiano',
+    'multitenancy-poc2': 'land-pituba'
+  }
+  const response = NextResponse.rewrite(new URL(`/${schoolName}${url.pathname}`, request.url))
+  if (schoolName === 'multitenancy-poc') {
+    response.cookies.set('nome', schoolName)
+  } else {
+    response.cookies.set('nome', schoolName)
+  }
+
+  return response
 }
 
 export const config = {
